@@ -1,354 +1,491 @@
-# 七海-后端 🤖
+<div align="center">
 
-> 基于 SubAgent 架构的 AI Agent 系统 | FastAPI + Python
+# 七海 AI 助手 - 后端服务 🤖
 
-[![Status](https://img.shields.io/badge/status-active-success)]()
-[![Python](https://img.shields.io/badge/python-3.9+-blue)]()
-[![FastAPI](https://img.shields.io/badge/fastapi-latest-green)]()
+**基于 SubAgent 架构的智能 AI Agent 系统**
 
-## ✨ 核心创新
+[![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/fastapi-latest-009688.svg)](https://fastapi.tiangolo.com/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](../LICENSE)
 
-### 🏗️ SubAgent 分层架构
+</div>
 
-**核心思想**：主 Agent 负责任务编排，SearchSubAgent 负责深度搜索执行
+---
+
+## 💡 核心创新
+
+### 🏗️ 多 SubAgent 协作架构
+
+将复杂任务分配给专业的 SubAgent，各司其职，主 Agent 仅负责任务编排和结果整合。
 
 ```
-     主Agent（任务理解 + 结果整合）
-            │
-            ▼
-    SearchSubAgent（深度搜索专家）
-     ├─ TODO自主规划
-     ├─ 多源信息检索
-     ├─ 内容深度提取
-     └─ 紧凑报告生成
+              主 Agent
+                 ↓
+    ┌────────────┼────────────┐
+    ↓            ↓            ↓
+SearchAgent  BrowserAgent  WindowsAgent
+  (搜索)       (浏览器)     (桌面)
 ```
 
 **关键优势**：
-- ✅ **上下文优化** - SubAgent 仅返回紧凑报告（摘要+关键发现+文件ID），主 Agent 上下文占用降低 80%
-- ✅ **职责分离** - 主 Agent 专注对话和任务分配，SubAgent 专注执行和规划
-- ✅ **自主规划** - SubAgent 内置 TODO 系统，能够自主分解复杂搜索任务
-- ✅ **工具内聚** - SearchSubAgent 拥有完整 Tavily 工具集（search/extract/map/crawl），主 Agent 仅保留轻度搜索
+- ⚡ **上下文优化** - SubAgent 仅返回紧凑报告，主 Agent 上下文占用降低 **80%**
+- 🎯 **职责分离** - 主 Agent 专注对话，SubAgent 专注执行
+- 🧠 **自主规划** - SubAgent 内置 TODO 系统，自动分解复杂任务
+- 🔧 **工具内聚** - 每个 SubAgent 拥有完整的专业工具集
+
+### 🧠 三层记忆系统
+
+| 记忆层级 | 作用 | 触发条件 |
+|---------|------|---------|
+| **短期记忆** | 当前会话完整历史 | 实时存储 |
+| **中期记忆** | 自动压缩长上下文 | Token 使用率 > 92% |
+| **长期记忆** | 持久化用户偏好 | 用户主动保存 |
 
 ### 🤖 七海人格系统
 
 - 完整的有栖原七海（Arihara Nanami）人格设定
-- 自然流畅的对话风格，技术助手+义妹角色融合
+- 技术助手 + 义妹角色融合
+- 自然流畅的对话风格
 - 高精度时间系统（精确到秒）
 
-### 🧠 三层记忆系统
+---
 
-- **短期记忆** - 当前会话完整历史
-- **中期记忆** - 自动压缩长上下文（阈值 92% 可配）
-- **长期记忆** - 持久化用户偏好到 Markdown
+## 🤖 SubAgent 详解
 
-### 🔍 深度搜索能力（SearchSubAgent）
+### ✅ SearchSubAgent - 深度搜索专家
 
-相比主 Agent 的轻度搜索（3条结果，basic深度），SearchSubAgent 提供：
-- **深度检索** - max_results=10，search_depth="advanced"
-- **内容提取** - 使用 tavily_extract 提取 URL 完整内容
-- **网站映射** - 使用 tavily_map 分析网站结构
-- **深度爬取** - 使用 tavily_crawl 爬取整站信息
+**状态**: 已完成并可用
 
-## 🛠️ 技术栈
+**核心能力**:
+- 🔍 深度检索 - `max_results=10`, `search_depth="advanced"`
+- 📄 内容提取 - `tavily_extract` 完整网页内容
+- 🗺️ 网站映射 - `tavily_map` 网站结构分析
+- 🕷️ 深度爬取 - `tavily_crawl` 整站信息收集
 
-| 类别 | 技术 |
-|-----|------|
-| **后端框架** | FastAPI + Uvicorn |
-| **AI 模型** | OpenAI Compatible API（多模型配置） |
-| **搜索引擎** | Tavily Search API |
-| **记忆管理** | 三层记忆 + 自动压缩 + Markdown 持久化 |
-| **数据存储** | JSON + File Store |
+**技术亮点**:
+- 紧凑报告机制（仅返回摘要+关键发现+文件ID）
+- 自主 TODO 规划（自动分解复杂搜索任务）
+- 工具内聚（完整 Tavily 工具集）
+
+---
+
+### 🚧 BrowserSubAgent - 浏览器操控专家
+
+**状态**: 开发中 (v0.2.0)
+
+**设计理念**: 双路径架构
+- **快速通道** - 视觉定位 + 坐标操作（简单任务）
+- **稳健通道** - Playwright 选择器（复杂流程）
+
+**核心能力**:
+- 🌐 智能导航 - 页面跳转、弹窗处理、表单验证
+- 👁️ 视觉定位 - 截图 + AI 视觉分析 → 精确坐标
+- 🎯 选择器操作 - `get_by_role` / `get_by_text` / `locator`
+- ✅ 状态验证 - 动作前后自动验证，失败重试
+
+---
+
+### 🚧 WindowsSubAgent - 桌面自动化专家
+
+**状态**: 开发中 (v0.3.0)
+
+**核心能力**:
+- 🚀 应用管理 - 启动、切换、关闭应用
+- 🖱️ UI 控制 - 点击、输入、选择菜单
+- 📊 进程管理 - 列举、监控、终止进程
+- ⚡ 命令执行 - PowerShell / CMD 调用
+- 📁 文件操作 - 读取、写入、移动文件
+
+---
 
 ## 🚀 快速开始
 
-### 1. 安装依赖
+### 📋 系统要求
+
+- **Python**: 3.9+
+- **操作系统**: Windows / macOS / Linux
+- **API 密钥**:
+  - OpenAI Compatible API（主模型 + 压缩模型）
+  - Tavily Search API
+
+### 🔧 安装步骤
+
+**1. 安装依赖**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. 配置环境变量
+**2. 配置环境变量**
 
-复制 `.env.example` 为 `.env`，配置以下关键参数：
+复制 `.env.example` 为 `.env`：
 
 ```bash
-# 主模型（用于主Agent和SubAgent，支持多模态）
-MAIN_PROVIDER='公益站'
-MAIN_MODEL='openai.gpt-5-chat'
-MAIN_API_KEY='your_api_key_here'
-MAIN_BASE_URL='https://aigate.binklac.com/v1'
-
-# 快速模型（用于记忆压缩和摘要）
-QUICK_PROVIDER='DeepSeek'
-QUICK_MODEL='deepseek-v3.1:671b'
-QUICK_API_KEY='your_api_key_here'
-QUICK_BASE_URL='https://fanyi.963312.xyz/v1'
-
-# Tavily 搜索 API
-TAVILY_API_KEY='your_tavily_key_here'
-
-# 服务器配置
-HOST=0.0.0.0
-PORT=7878
+cp .env.example .env
 ```
 
-### 3. 启动服务
+然后编辑 `.env` 文件，填入你的 API 密钥。
+
+**3. 启动服务**
 
 ```bash
-# 方式1：使用 uvicorn
-uvicorn main:app --host 0.0.0.0 --port 7878 --reload
-
-# 方式2：直接运行
+# 方式1：直接运行
 python main.py
+
+# 方式2：使用 uvicorn
+uvicorn main:app --host 0.0.0.0 --port 7878 --reload
 ```
 
 服务启动后访问：`http://localhost:7878/health`
+
+---
+
+## ⚙️ 配置说明
+
+### 📝 环境变量详解
+
+编辑 `backend/.env`，以下是完整的配置说明：
+
+#### 1️⃣ 主模型配置（用于主 Agent 对话）
+
+```bash
+# 主模型配置
+MAIN_PROVIDER='OpenAI'                # 提供商名称（仅用于日志）
+MAIN_MODEL='gpt-4'                    # 模型名称
+MAIN_API_KEY='sk-your-api-key'       # API 密钥
+MAIN_BASE_URL='https://api.openai.com/v1'  # API 端点
+MAIN_CONTEXT_LENGTH='128000'         # 上下文长度
+```
+
+#### 2️⃣ 压缩模型配置（用于上下文压缩，节省成本）
+
+```bash
+# 压缩模型（建议使用便宜的模型，如 DeepSeek）
+COMPACT_PROVIDER='DeepSeek'
+COMPACT_MODEL='deepseek-chat'
+COMPACT_API_KEY='sk-your-deepseek-key'
+COMPACT_BASE_URL='https://api.deepseek.com/v1'
+COMPACT_CONTEXT_LENGTH='128000'
+```
+
+#### 3️⃣ 快速模型配置（用于简单任务）
+
+```bash
+# 快速模型（用于简单任务，可与主模型相同）
+QUICK_PROVIDER='OpenAI'
+QUICK_MODEL='gpt-3.5-turbo'
+QUICK_API_KEY='sk-your-api-key'
+QUICK_BASE_URL='https://api.openai.com/v1'
+QUICK_CONTEXT_LENGTH='16000'
+```
+
+#### 4️⃣ SubAgent 独立配置
+
+每个 SubAgent 可以使用不同的模型，根据任务特点选择：
+
+```bash
+# SearchSubAgent - 深度搜索（推荐强模型）
+SEARCH_AGENT_PROVIDER='OpenAI'
+SEARCH_AGENT_MODEL='gpt-4'
+SEARCH_AGENT_API_KEY='sk-your-api-key'
+SEARCH_AGENT_BASE_URL='https://api.openai.com/v1'
+SEARCH_AGENT_CONTEXT_LENGTH='128000'
+
+# BrowserSubAgent - 浏览器操控（推荐视觉模型）
+BROWSER_AGENT_PROVIDER='OpenAI'
+BROWSER_AGENT_MODEL='gpt-4-vision-preview'
+BROWSER_AGENT_API_KEY='sk-your-api-key'
+BROWSER_AGENT_BASE_URL='https://api.openai.com/v1'
+BROWSER_AGENT_CONTEXT_LENGTH='128000'
+
+# WindowsSubAgent - 桌面自动化
+WINDOWS_AGENT_PROVIDER='DeepSeek'
+WINDOWS_AGENT_MODEL='deepseek-chat'
+WINDOWS_AGENT_API_KEY='sk-your-deepseek-key'
+WINDOWS_AGENT_BASE_URL='https://api.deepseek.com/v1'
+WINDOWS_AGENT_CONTEXT_LENGTH='128000'
+```
+
+#### 5️⃣ Tavily 搜索 API
+
+```bash
+# Tavily 搜索引擎（深度搜索必需）
+TAVILY_API_KEY='tvly-your-tavily-key'
+```
+
+获取 Tavily API Key：访问 [https://tavily.com/](https://tavily.com/)
+
+#### 6️⃣ 服务器与性能配置
+
+```bash
+# 服务器设置
+HOST=0.0.0.0
+PORT=7878
+
+# 工作目录
+WORKSPACE_ROOT='./workspace'
+ALLOW_FILE_READ=true
+
+# 上下文压缩阈值（0~1 之间）
+AUTO_COMPACT_RATIO=0.92
+
+# 长期记忆配置
+LTM_MD_ENABLED=1
+LTM_MD_PATH='data/ltm.md'
+
+# 工具结果截断（字节）
+TOOL_RESULT_MAX_SIZE=10240
+```
+
+#### 7️⃣ API 速率限制配置（避免 502 错误）
+
+```bash
+# LLM API 最小请求间隔（秒）
+# 如果你的 API 限制 30 rpm，则设置为 60/30=2 秒
+LLM_MIN_INTERVAL=2.5
+
+# 工具执行超时（秒）
+# SearchSubAgent 可能需要 10-15 轮迭代
+TOOL_EXECUTION_TIMEOUT=600
+
+# SubAgent 迭代延迟（秒）
+SUBAGENT_ITERATION_DELAY=0
+```
+
+---
+
+## 💰 成本优化建议
+
+### 多模型策略
+
+通过为不同任务配置不同模型，显著降低成本：
+
+| 任务类型 | 推荐模型 | 原因 |
+|---------|---------|------|
+| **主对话** | GPT-4 / Claude 3.5 | 需要高质量对话 |
+| **上下文压缩** | DeepSeek / GPT-3.5 | 简单摘要任务，用便宜模型 |
+| **搜索任务** | GPT-4 | 需要深度理解和规划 |
+| **浏览器操作** | GPT-4-Vision | 需要视觉理解 |
+| **桌面自动化** | DeepSeek | 简单指令执行，便宜即可 |
+
+**示例配置**（低成本方案）：
+```bash
+MAIN_MODEL='gpt-4-turbo'          # 主对话用 GPT-4
+COMPACT_MODEL='deepseek-chat'     # 压缩用 DeepSeek（便宜）
+QUICK_MODEL='gpt-3.5-turbo'       # 快速任务用 3.5
+SEARCH_AGENT_MODEL='gpt-4'        # 搜索用 GPT-4
+BROWSER_AGENT_MODEL='deepseek'    # 浏览器用 DeepSeek
+WINDOWS_AGENT_MODEL='deepseek'    # Windows 用 DeepSeek
+```
+
+**成本对比**：
+- 全 GPT-4：~$0.03/1K tokens × 100K = **$3.00**
+- 混合方案：~$0.01/1K tokens × 100K = **$1.00** （节省 67%）
+
+---
 
 ## 📡 API 接口
 
 ### 核心端点
 
 ```http
-GET  /health              # 健康检查
-POST /chat                # 流式对话（支持文件上传）
-POST /v1/chat/completions # OpenAI 兼容接口
-POST /upload              # 文件上传
-GET  /todos               # 获取任务列表
-POST /todos               # 创建任务
+GET  /health                # 健康检查
+POST /chat                  # 流式对话（支持文件上传）
+POST /v1/chat/completions   # OpenAI 兼容接口
+POST /upload                # 文件上传
+GET  /todos                 # 获取任务列表
+POST /todos                 # 创建任务
+PUT  /todos/{id}            # 更新任务
+DELETE /todos/{id}          # 删除任务
+POST /preferences/save      # 保存用户偏好到长期记忆
 ```
 
 ### 流式对话示例
 
+**请求**：
 ```bash
 curl -X POST http://localhost:7878/chat \
-  -F "input=请在arXiv上搜索DeepSeek R1的论文并总结核心创新"
+  -F "input=请在arXiv上搜索DeepSeek R1的论文并总结核心创新" \
+  -F "session_id=default"
 ```
 
-**流式响应格式**：
+**响应**（Server-Sent Events）：
 ```
-[meta] {"session_id": "...", "timestamp": ...}
+[meta] {"session_id": "default", "timestamp": 1234567890}
 [🔧 正在调用1个工具...]
-[✓ search_subagent]: {"summary": "找到15篇相关论文...", ...}
-文本内容...
+[✓ search_subagent]: {"summary": "找到15篇相关论文...", "key_findings": [...]}
+DeepSeek R1 的核心创新包括：
+1. 671B 参数 MoE 架构...
 ```
 
-## 🎯 SubAgent 架构详解
-
-### SearchSubAgent 工作流程
-
-```
-用户请求："搜索arXiv上的DeepSeek R1论文"
-   ↓
-主 Agent 分析任务 → 决定调用 search_subagent
-   ↓
-┌─────── SearchSubAgent 执行 ───────┐
-│ 1. 创建 TODO LIST                 │
-│    - 搜索arXiv                     │
-│    - 提取论文内容                  │
-│    - 总结核心创新                  │
-│                                    │
-│ 2. 使用 Tavily 工具执行            │
-│    - tavily_search (深度，10条)   │
-│    - tavily_extract (提取内容)    │
-│                                    │
-│ 3. 更新 TODO 状态                  │
-│                                    │
-│ 4. 生成紧凑报告                    │
-│    {                               │
-│      "summary": "执行摘要",        │
-│      "key_findings": ["发现1"...], │
-│      "artifacts": ["file_id"],     │
-│      "todos_completed": 3,         │
-│      "todos_total": 3              │
-│    }                               │
-└────────────────────────────────────┘
-   ↓
-主 Agent 接收报告 → 整合呈现给用户
-```
-
-### 紧凑报告机制
-
-**问题**：SubAgent 如果返回完整执行历史，会导致主 Agent 上下文爆炸
-
-**解决方案**：SubAgent 仅返回紧凑报告
-
-```python
-{
-  "error": False,
-  "summary": "找到15篇DeepSeek R1相关论文，核心创新...",  # 200字内摘要
-  "key_findings": [                                      # 最多10条关键发现
-    "671B参数MoE架构",
-    "训练成本降低40%",
-    "MMLU超越GPT-4"
-  ],
-  "artifacts": ["file_id_123"],    # 仅传文件ID，不传base64
-  "todos_completed": 3,
-  "todos_total": 3,
-  "iterations": 5,
-  "subagent": "SearchSubAgent"
-}
-```
-
-**效果**：
-- ❌ 不传递：SubAgent 的完整 memory、工具调用历史、中间结果
-- ✅ 仅传递：摘要、关键发现、文件 ID
-- 📊 结果：上下文占用降低 **80%**
+---
 
 ## 📁 项目结构
 
 ```
-七海-后端/
+backend/
 ├── main.py                          # FastAPI 应用入口
-├── requirements.txt                 # 依赖列表
-├── .env                             # 环境变量配置
+├── requirements.txt                 # Python 依赖
+├── .env.example                     # 环境变量模板
 │
 ├── core/                            # 核心模块
-│   ├── agent_loop.py               # 主 Agent 循环（任务分配+报告整合）
-│   ├── subagent.py                 # SubAgent 基类（TODO+工具执行）
-│   ├── memory.py                   # 记忆管理器（三层记忆）
-│   ├── ltm.py                      # 长期记忆（Markdown 持久化）
+│   ├── agent_loop.py               # 主 Agent 循环
+│   ├── subagent.py                 # SubAgent 基类
+│   ├── memory.py                   # 记忆管理器
+│   ├── ltm.py                      # 长期记忆
 │   ├── model_manager.py            # 模型管理器
-│   └── prompts.py                  # 人格系统（七海设定）
+│   └── prompts.py                  # 七海人格系统
 │
 ├── tools/                           # 工具集
-│   ├── manager.py                  # 工具管理器
-│   ├── subagent_search.py          # 深度搜索 SubAgent ⭐
+│   ├── subagent_search.py          # ✅ SearchSubAgent
+│   ├── subagent_browser.py         # 🚧 BrowserSubAgent
+│   ├── subagent_windows.py         # 🚧 WindowsSubAgent
 │   ├── tavily_wrapper.py           # Tavily 搜索工具
-│   ├── todo_tools.py               # TODO 管理工具
-│   ├── file_tools.py               # 文件缓存工具
-│   └── vision_screenshot_tools.py  # 截图工具
+│   ├── todo_tools.py               # TODO 管理
+│   ├── file_tools.py               # 文件缓存
+│   └── vision_screenshot_tools.py  # 截图+视觉分析
 │
 ├── services/                        # 服务层
 │   ├── file_store.py               # 文件存储
 │   ├── todo_store.py               # TODO 存储
 │   └── report_store.py             # 报告存储
 │
-├── schemas/                         # 数据模型
-│   ├── openai.py                   # OpenAI 格式
-│   ├── todo.py                     # TODO 模型
-│   └── preferences.py              # 偏好设置
-│
-└── data/                            # 数据目录
-    ├── uploads/                    # 上传文件
-    └── ltm.md                      # 长期记忆
+└── schemas/                         # 数据模型
+    ├── openai.py                   # OpenAI 格式
+    ├── todo.py                     # TODO 模型
+    └── preferences.py              # 偏好设置
 ```
 
-## 🔧 主要工具
-
-### 主 Agent 工具集
-
-| 工具名 | 功能 | 说明 |
-|--------|------|------|
-| `tavily_search` | 轻度搜索 | 3条结果，快速了解 |
-| `screenshot` | 快速截图 | 全屏/窗口/区域截图 |
-| `screenshot_and_analyze` | 截图+分析 | 一步完成截图和内容分析 |
-| `search_subagent` | 深度搜索 SubAgent ⭐ | 学术/技术深度检索 |
-| TODO 管理 (5个) | 任务管理 | 创建、更新、删除、查看、排序 |
-| 文件缓存 (4个) | 文件操作 | 保存、列表、统计、清理 |
-
-### SearchSubAgent 工具集
-
-| 工具名 | 功能 |
-|--------|------|
-| `tavily_search` | 深度搜索（max_results=10, depth="advanced"） |
-| `tavily_extract` | URL 内容提取 |
-| `tavily_map` | 网站结构映射 |
-| `tavily_crawl` | 网站深度爬取 |
+---
 
 ## 🎯 使用场景
 
-### 1. 学术研究助手
+### 场景 1：学术研究助手
 
 ```python
-"请在arXiv和Nature上搜索DeepSeek R1的最新文章，并对比分析"
+"请在 arXiv 和 Nature 上搜索 Transformer 架构的最新进展，并对比分析"
 ```
 
-→ SearchSubAgent 自动规划：
-1. 搜索 arXiv（深度模式，10条）
-2. 搜索 Nature
-3. 提取关键论文内容
-4. 对比技术差异
-5. 生成结构化报告
+**执行流程**：
+1. 主 Agent 识别为深度搜索任务
+2. 调用 SearchSubAgent
+3. SearchSubAgent 创建 TODO：
+   - 搜索 arXiv（深度模式）
+   - 搜索 Nature
+   - 提取论文内容
+   - 对比分析
+   - 生成结构化报告
+4. 返回紧凑报告给主 Agent
+5. 主 Agent 整合并呈现给用户
 
-### 2. 技术文档收集
+### 场景 2：电商价格监控（开发中）
 
 ```python
-"收集FastAPI官方文档中关于异步处理的所有章节"
+"每天上午10点检查京东 iPhone 15 的价格，低于7500元就通知我"
 ```
 
-→ SearchSubAgent 执行：
-1. 使用 tavily_map 映射官网结构
-2. 使用 tavily_crawl 爬取相关页面
-3. 使用 tavily_extract 提取具体内容
-4. 整理成紧凑报告
+**执行流程**：
+1. 主 Agent 识别为浏览器自动化任务
+2. 调用 BrowserSubAgent
+3. BrowserSubAgent 执行：
+   - 打开京东商品页
+   - 提取价格信息
+   - 与目标价格对比
+   - 触发通知（如果满足条件）
 
-### 3. 多源信息对比
+### 场景 3：批量文档处理（开发中）
 
 ```python
-"对比GitHub、Reddit、HackerNews上关于Claude Code的讨论"
+"把桌面的 20 个 Word 文档都转成 PDF"
 ```
 
-→ SearchSubAgent 规划：
-1. 分别搜索三个平台
-2. 提取关键讨论点
-3. 分析情绪倾向
-4. 生成对比表格
+**执行流程**：
+1. 主 Agent 识别为桌面自动化任务
+2. 调用 WindowsSubAgent
+3. WindowsSubAgent 执行：
+   - 遍历桌面 .docx 文件
+   - 逐个打开并另存为 PDF
+   - 关闭 Word
+   - 生成执行报告
 
-## ⚙️ 配置说明
+---
 
-### 关键环境变量
+## 🔧 开发指南
+
+### 创建自定义 SubAgent
+
+```python
+from core.subagent import SubAgent
+from tools.base import BaseTool
+
+class MyCustomSubAgent(SubAgent):
+    def __init__(self, max_iterations: int = 10):
+        super().__init__(
+            name="MyCustomSubAgent",
+            description="你的 SubAgent 描述",
+            system_prompt="你是一个专门的 SubAgent...",
+            max_iterations=max_iterations,
+            model_pointer="custom_agent"  # 使用独立模型配置
+        )
+
+    def _register_tools(self):
+        """注册 SubAgent 专用工具"""
+        self.tools = [
+            MyCustomTool(),
+            # ... 更多工具
+        ]
+```
+
+在 `.env` 中添加模型配置：
 
 ```bash
-# 主 Agent 配置
-MAIN_MAX_ITERATIONS=15               # 主 Agent 最大迭代次数
-AUTO_COMPACT_RATIO=0.92              # 上下文压缩阈值
-
-# SubAgent 配置
-SUBAGENT_MAX_ITERATIONS=10           # SubAgent 最大迭代次数
-SEARCH_AGENT_MODEL='openai.gpt-5-chat'  # SearchSubAgent 专用模型
-
-# 长期记忆配置
-LTM_MD_ENABLED=1                     # 是否启用长期记忆
-LTM_MD_PATH=data/ltm.md             # 长期记忆存储路径
-
-# 上下文管理
-TOOL_RESULT_MAX_SIZE=10240           # 工具结果最大大小（10KB）
+CUSTOM_AGENT_PROVIDER='OpenAI'
+CUSTOM_AGENT_MODEL='gpt-4'
+CUSTOM_AGENT_API_KEY='sk-xxx'
+CUSTOM_AGENT_BASE_URL='https://api.openai.com/v1'
 ```
 
-## 🔄 SubAgent 设计理念
+---
 
-### 为什么需要 SubAgent？
+## 🐛 常见问题
 
-**问题 1**：搜索任务复杂时，主 Agent 需要多次调用工具，上下文快速膨胀
+### Q1: 502 Bad Gateway 错误
 
-**解决**：将复杂搜索任务委托给 SearchSubAgent，它有独立的执行环境和工具集
+**原因**: API 调用频率超过限制
 
-**问题 2**：深度搜索需要多轮规划和调整，主 Agent 容易迷失方向
+**解决方案**：
+```bash
+# 增加请求间隔
+LLM_MIN_INTERVAL=3.0
 
-**解决**：SubAgent 内置 TODO 系统，能够自主分解任务、更新状态
+# 增加 SubAgent 迭代延迟
+SUBAGENT_ITERATION_DELAY=1.5
+```
 
-**问题 3**：工具调用历史占用大量上下文
+### Q2: 上下文长度超限
 
-**解决**：SubAgent 仅返回紧凑报告，中间过程不传递给主 Agent
+**原因**: 对话历史过长
 
-### SubAgent vs 直接工具调用
+**解决方案**：
+```bash
+# 降低压缩阈值（更早触发压缩）
+AUTO_COMPACT_RATIO=0.85
 
-| 对比项 | 直接调用工具 | 使用 SubAgent |
-|--------|-------------|--------------|
-| 工具访问 | 主 Agent 逐个调用 | SubAgent 内部批量调用 |
-| 任务规划 | 主 Agent 需要规划 | SubAgent 自主规划 TODO |
-| 上下文占用 | 每次调用都占用 | 仅返回紧凑报告 |
-| 错误恢复 | 主 Agent 处理 | SubAgent 自主重试 |
-| 适用场景 | 简单单步操作 | 复杂多步流程 |
+# 减少工具结果大小
+TOOL_RESULT_MAX_SIZE=5120
+```
 
-## 📝 技术亮点总结
+### Q3: SearchSubAgent 超时
 
-1. **SubAgent 分层架构** - 职责分离，主 Agent 轻量化
-2. **紧凑报告机制** - 上下文优化，降低 80% 占用
-3. **TODO 自主规划** - SubAgent 能够自主分解任务
-4. **多模型配置** - 主 Agent、SubAgent、压缩模型可独立配置
-5. **三层记忆系统** - 短期+中期+长期，完整的记忆管理
-6. **七海人格系统** - 自然流畅的对话体验
+**原因**: 搜索任务复杂，需要较长时间
+
+**解决方案**：
+```bash
+# 增加工具执行超时
+TOOL_EXECUTION_TIMEOUT=900  # 15分钟
+```
+
+---
 
 ## 📄 许可证
 
@@ -356,4 +493,10 @@ MIT License
 
 ---
 
-💙 Built with FastAPI + Python | 七海团队
+<div align="center">
+
+**💙 Built with FastAPI + Python**
+
+[返回主项目](../) | [前端文档](../frontend/README.md)
+
+</div>
