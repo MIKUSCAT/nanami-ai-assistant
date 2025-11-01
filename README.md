@@ -251,28 +251,15 @@ npm run electron:build
 
 ### 🎯 配置说明
 
-编辑 `backend/.env`：
+**2. 配置环境变量**
+
+复制 `.env.example` 为 `.env`：
 
 ```bash
-# 主模型（用于主Agent和SubAgent，支持多模态）
-MAIN_PROVIDER='你的提供商'
-MAIN_MODEL='模型名称'
-MAIN_API_KEY='你的API密钥'
-MAIN_BASE_URL='https://api.example.com/v1'
-
-# 快速模型（用于记忆压缩和摘要）
-QUICK_PROVIDER='DeepSeek'
-QUICK_MODEL='deepseek-chat'
-QUICK_API_KEY='你的API密钥'
-QUICK_BASE_URL='https://api.deepseek.com/v1'
-
-# Tavily 搜索 API
-TAVILY_API_KEY='你的Tavily密钥'
-
-# 服务器配置
-HOST=0.0.0.0
-PORT=7878
+cp .env.example .env
 ```
+
+然后编辑 `.env` 文件，填入你的 API 密钥。
 
 ---
 
