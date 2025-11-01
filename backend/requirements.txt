@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+openai
+tavily-python
+mcp
+python-multipart
+httpx
+# Windows UI控制工具依赖
+pyautogui
+psutil
+pywin32
+pyperclip  # 中文输入支持
+# 截图工具依赖
+pillow

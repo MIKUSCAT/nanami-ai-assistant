@@ -1,0 +1,2 @@
+# This file ensures the data directory is tracked by git
+# The directory will store user data but should remain empty in the repository
